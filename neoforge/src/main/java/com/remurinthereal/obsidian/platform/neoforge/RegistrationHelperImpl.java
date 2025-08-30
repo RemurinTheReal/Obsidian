@@ -37,7 +37,7 @@ public final class RegistrationHelperImpl {
         }
 
         @Override
-        public ResourceKey<? extends T> getKey() {
+        public ResourceKey<? super T> getKey() {
             return registryObject.getKey();
         }
     }

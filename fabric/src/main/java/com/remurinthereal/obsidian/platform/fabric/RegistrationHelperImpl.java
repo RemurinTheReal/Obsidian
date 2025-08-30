@@ -9,12 +9,12 @@ import java.util.function.Supplier;
 
 public final class RegistrationHelperImpl {
     public static <T> RegistrationSupplier<? extends T> register(Registry<T> registry, ResourceLocation resourceLocation, Supplier<? extends T> supplier) {
-        return new FabricRegistrationSupplier<T>(registry, Registry.register(registry, resourceLocation, supplier.get()));
+        return new FabricRegistrationSupplier<>(registry, Registry.register(registry, resourceLocation, supplier.get()));
     }
 
-    public record FabricRegistrationSupplier<T>(Registry<T> registry, T item) implements RegistrationSupplier<T> {
+    public record FabricRegistrationSupplier<T, V extends T>(Registry<T> registry, V item) implements RegistrationSupplier<V> {
         @Override
-        public T get() {
+        public V get() {
             return item;
         }
 

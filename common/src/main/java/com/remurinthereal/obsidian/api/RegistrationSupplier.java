@@ -5,5 +5,5 @@ import net.minecraft.resources.ResourceKey;
 import java.util.function.Supplier;
 
 public interface RegistrationSupplier<T> extends Supplier<T> {
-    ResourceKey<? extends T> getKey();
+    ResourceKey<? super T> getKey();
 }
