@@ -2,6 +2,7 @@ package com.remurinthereal.obsidian.platform.neoforge;
 
 import com.remurinthereal.obsidian.api.RegistrationSupplier;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -33,6 +34,11 @@ public final class RegistrationHelperImpl {
         @Override
         public T get() {
             return registryObject.get();
+        }
+
+        @Override
+        public ResourceKey<? extends T> getKey() {
+            return registryObject.getKey();
         }
     }
 }
