@@ -7,4 +7,6 @@ public interface CreativeModeTabEvent {
     public void add(ItemStack... entries);
     public void addAfter(ItemStack targetEntry, ItemStack... entries);
     public void addBefore(ItemStack targetEntry, ItemStack... entries);
+
+    public void remove(ItemStack... entries);
 }

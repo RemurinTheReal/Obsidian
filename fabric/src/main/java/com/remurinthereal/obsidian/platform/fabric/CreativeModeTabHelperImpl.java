@@ -33,5 +33,16 @@ public final class CreativeModeTabHelperImpl {
         public void addBefore(ItemStack targetEntry, ItemStack... entries) {
             event.addBefore(targetEntry, entries);
         }
+
+        @Override
+        public void remove(ItemStack... entries) {
+            for (ItemStack entry : entries) {
+                int searchIndex = event.getSearchTabStacks().indexOf(entry);
+                if (searchIndex != -1) event.getSearchTabStacks().remove(searchIndex);
+
+                int displayIndex = event.getDisplayStacks().indexOf(entry);
+                if (displayIndex != -1) event.getDisplayStacks().remove(displayIndex);
+            }
+        }
     }
 }

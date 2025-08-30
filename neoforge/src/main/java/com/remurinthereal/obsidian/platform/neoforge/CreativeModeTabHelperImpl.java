@@ -76,5 +76,13 @@ public final class CreativeModeTabHelperImpl {
                 event.insertBefore(targetEntry, entry, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
             }
         }
+
+        @Override
+        public void remove(ItemStack... entries) {
+            List<ItemStack> list = List.of(entries);
+
+            event.getParentEntries().removeIf(list::contains);
+            event.getSearchEntries().removeIf(list::contains);
+        }
     }
 }
