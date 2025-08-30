@@ -8,7 +8,7 @@ public final class PlatformHelperImpl {
         return ModList.get().isLoaded(modID);
     }
 
-    public static PlatformHelper.ModLoader getModLoader() {
-        return PlatformHelper.ModLoader.NeoForge;
+    public static PlatformHelper.Platform getPlatform() {
+        return PlatformHelper.Platform.NeoForge;
     }
 }

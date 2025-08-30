@@ -9,11 +9,11 @@ public final class PlatformHelper {
     }
 
     @ExpectPlatform
-    public static ModLoader getModLoader() {
+    public static Platform getPlatform() {
         throw new AssertionError();
     }
 
-    public enum ModLoader {
+    public enum Platform {
         Fabric,
         @Deprecated Forge,
         NeoForge,

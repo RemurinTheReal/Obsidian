@@ -8,7 +8,7 @@ public final class PlatformHelperImpl {
         return FabricLoader.getInstance().isModLoaded(modID);
     }
 
-    public static PlatformHelper.ModLoader getModLoader() {
-        return PlatformHelper.ModLoader.Fabric;
+    public static PlatformHelper.Platform getPlatform() {
+        return PlatformHelper.Platform.Fabric;
     }
 }
