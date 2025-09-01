@@ -25,7 +25,7 @@ public final class RegistrationHelperImpl {
     public static void registerAll(IEventBus eventBus) {
         DEFERRED_REGISTERS.values().stream().flatMap(map -> {
             return map.values().stream();
-        }).forEach(eventBus::register);
+        }).forEach(deferredRegister -> deferredRegister.register(eventBus));
 
         DEFERRED_REGISTERS.clear();
     }
