@@ -15,11 +15,10 @@ public final class RegistrationHelperImpl {
     private static final HashMap<String, HashMap<Registry<?>, DeferredRegister<?>>> DEFERRED_REGISTERS = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> RegistrationSupplier<T> register(Registry<T> registry, ResourceLocation resourceLocation, Supplier<? extends T> supplier) {
+    public static <T, V extends T> RegistrationSupplier<V> register(Registry<T> registry, ResourceLocation resourceLocation, Supplier<V> supplier) {
         var hashMap = DEFERRED_REGISTERS.computeIfAbsent(resourceLocation.getNamespace(), key -> new HashMap<>());
-        var deferredRegister = hashMap.computeIfAbsent(registry, key -> DeferredRegister.create(key, resourceLocation.getNamespace()));
-
-        return new NeoForgeRegistrationSupplier<>(((DeferredRegister<T>)deferredRegister).register(resourceLocation.getPath(), supplier));
+        var deferredRegister = (DeferredRegister<T>)hashMap.computeIfAbsent(registry, key -> DeferredRegister.create(key, resourceLocation.getNamespace()));
+        return new NeoForgeRegistrationSupplier<>((DeferredHolder<V, ? extends V>)deferredRegister.register(resourceLocation.getPath(), supplier));
     }
 
     public static void registerAll(IEventBus eventBus) {

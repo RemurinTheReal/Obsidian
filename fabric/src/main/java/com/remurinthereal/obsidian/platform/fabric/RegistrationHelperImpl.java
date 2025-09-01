@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Supplier;
 
 public final class RegistrationHelperImpl {
-    public static <T> RegistrationSupplier<? extends T> register(Registry<T> registry, ResourceLocation resourceLocation, Supplier<? extends T> supplier) {
+    public static <T, V extends T> RegistrationSupplier<V> register(Registry<T> registry, ResourceLocation resourceLocation, Supplier<V> supplier) {
         return new FabricRegistrationSupplier<>(registry, Registry.register(registry, resourceLocation, supplier.get()));
     }
 

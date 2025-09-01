@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 public final class RegistrationHelper {
     @ExpectPlatform
-    public static <T> RegistrationSupplier<? extends T> register(Registry<T> registry, ResourceLocation resourceLocation, Supplier<? extends T> supplier) {
+    public static <T, V extends T> RegistrationSupplier<V> register(Registry<T> registry, ResourceLocation resourceLocation, Supplier<V> supplier) {
         throw new AssertionError();
     }
 }
