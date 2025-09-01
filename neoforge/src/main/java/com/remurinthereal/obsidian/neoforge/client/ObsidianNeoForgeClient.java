@@ -1,4 +1,4 @@
-﻿package com.remurinthereal.obsidian.neoforge.client;
+package com.remurinthereal.obsidian.neoforge.client;
 
 import com.remurinthereal.obsidian.Obsidian;
 import com.remurinthereal.obsidian.client.ObsidianClient;

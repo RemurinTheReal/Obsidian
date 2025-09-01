@@ -11,7 +11,7 @@ import net.neoforged.neoforge.common.NeoForge;
 @Mod(Obsidian.MOD_ID)
 public final class ObsidianNeoForge {
     public ObsidianNeoForge(IEventBus eventBus) {
-        NeoForge.EVENT_BUS.register(CreativeModeTabHelperImpl.class);
+        eventBus.register(CreativeModeTabHelperImpl.class);
         Obsidian.init();
 
         RegistrationHelperImpl.registerAll(eventBus);
