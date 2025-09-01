@@ -4,6 +4,11 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 
 public final class PlatformHelper {
     @ExpectPlatform
+    public static boolean isDev() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
     public static boolean isModLoaded(String modID) {
         throw new AssertionError();
     }

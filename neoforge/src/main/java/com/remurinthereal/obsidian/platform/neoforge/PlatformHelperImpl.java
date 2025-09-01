@@ -2,8 +2,13 @@ package com.remurinthereal.obsidian.platform.neoforge;
 
 import com.remurinthereal.obsidian.platform.PlatformHelper;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLLoader;
 
 public final class PlatformHelperImpl {
+    public static boolean isDev() {
+        return !FMLLoader.isProduction();
+    }
+
     public static boolean isModLoaded(String modID) {
         return ModList.get().isLoaded(modID);
     }
