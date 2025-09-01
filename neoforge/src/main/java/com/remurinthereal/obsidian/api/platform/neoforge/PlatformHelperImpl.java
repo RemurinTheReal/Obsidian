@@ -1,6 +1,6 @@
-package com.remurinthereal.obsidian.platform.neoforge;
+package com.remurinthereal.obsidian.api.platform.neoforge;
 
-import com.remurinthereal.obsidian.platform.PlatformHelper;
+import com.remurinthereal.obsidian.api.platform.PlatformHelper;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 

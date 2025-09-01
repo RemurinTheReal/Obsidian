@@ -1,4 +1,4 @@
-package com.remurinthereal.obsidian.platform.fabric;
+package com.remurinthereal.obsidian.api.platform.fabric;
 
 import com.remurinthereal.obsidian.api.CreativeModeTabEvent;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;

@@ -1,12 +1,13 @@
 {
   "required": true,
-  "package": "com.remurinthereal.obsidian.mixin",
+  "package": "com.remurinthereal.obsidian.core.mixin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
-    "InventoryScreenMixin"
+
   ],
   "mixins": [
+    "InventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

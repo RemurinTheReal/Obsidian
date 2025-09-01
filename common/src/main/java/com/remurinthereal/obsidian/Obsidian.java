@@ -1,6 +1,5 @@
 package com.remurinthereal.obsidian;
 
-
 import net.minecraft.resources.ResourceLocation;
 
 public final class Obsidian {

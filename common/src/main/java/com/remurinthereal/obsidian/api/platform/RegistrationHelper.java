@@ -1,4 +1,4 @@
-package com.remurinthereal.obsidian.platform;
+package com.remurinthereal.obsidian.api.platform;
 
 import com.remurinthereal.obsidian.api.RegistrationSupplier;
 import dev.architectury.injectables.annotations.ExpectPlatform;

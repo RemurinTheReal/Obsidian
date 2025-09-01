@@ -1,6 +1,6 @@
-package com.remurinthereal.obsidian.mixin;
+package com.remurinthereal.obsidian.core.mixin;
 
-import com.remurinthereal.obsidian.platform.PlatformHelper;
+import com.remurinthereal.obsidian.api.platform.PlatformHelper;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import org.spongepowered.asm.mixin.Mixin;

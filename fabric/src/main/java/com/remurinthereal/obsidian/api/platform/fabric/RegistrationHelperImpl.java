@@ -1,4 +1,4 @@
-package com.remurinthereal.obsidian.platform.fabric;
+package com.remurinthereal.obsidian.api.platform.fabric;
 
 import com.remurinthereal.obsidian.api.RegistrationSupplier;
 import net.minecraft.core.Registry;

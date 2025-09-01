@@ -1,4 +1,4 @@
-package com.remurinthereal.obsidian.platform.neoforge;
+package com.remurinthereal.obsidian.api.platform.neoforge;
 
 import com.remurinthereal.obsidian.api.RegistrationSupplier;
 import net.minecraft.core.Registry;
