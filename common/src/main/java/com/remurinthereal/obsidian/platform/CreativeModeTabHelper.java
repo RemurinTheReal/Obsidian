@@ -16,7 +16,8 @@ public final class CreativeModeTabHelper {
         throw new AssertionError();
     }
 
-    public static ResourceKey<? extends CreativeModeTab> register(ResourceLocation resourceLocation, Supplier<CreativeModeTab> creativeModeTab) {
-        return RegistrationHelper.register(BuiltInRegistries.CREATIVE_MODE_TAB, resourceLocation, creativeModeTab).getKey();
+    @SuppressWarnings("unchecked")
+    public static ResourceKey<CreativeModeTab> register(ResourceLocation resourceLocation, Supplier<CreativeModeTab> creativeModeTab) {
+        return (ResourceKey<CreativeModeTab>)RegistrationHelper.register(BuiltInRegistries.CREATIVE_MODE_TAB, resourceLocation, creativeModeTab).getKey();
     }
 }
