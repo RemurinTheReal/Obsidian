@@ -8,14 +8,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(InventoryScreen.class)
-public class InventoryScreenMixin {
+public final class InventoryScreenMixin {
     @Redirect(method = "containerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
-    private Object containerTick(OptionInstance<Object> instance) {
-        return PlatformHelper.isDev() || (boolean)instance.get();
+    private Object containerTick(OptionInstance<Boolean> instance) {
+        return PlatformHelper.isDev() || instance.get();
     }
 
     @Redirect(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;"))
-    private Object init(OptionInstance<Object> instance) {
-        return PlatformHelper.isDev() || (boolean)instance.get();
+    private Object init(OptionInstance<Boolean> instance) {
+        return PlatformHelper.isDev() || instance.get();
     }
 }
