@@ -1,12 +1,12 @@
 {
   "required": true,
-  "package": "com.remurinthereal.obsidian.core.mixin",
+  "package": "com.remurinthereal.obsidian.core.mixin.fabric",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
-    "client.InventoryScreenMixin"
   ],
   "mixins": [
+    "SharedSuggestionProviderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

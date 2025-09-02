@@ -6,12 +6,12 @@ import java.util.List;
 
 public final class PlatformHelper {
     @ExpectPlatform
-    public static List<String> getDependencies() {
+    public static List<String> getDependencies(String modID) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static List<String> getDependents() {
+    public static List<String> getDependents(String modID) {
         throw new AssertionError();
     }
 
