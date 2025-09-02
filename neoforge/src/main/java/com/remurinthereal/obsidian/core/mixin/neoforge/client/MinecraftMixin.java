@@ -1,4 +1,4 @@
-package com.remurinthereal.obsidian.core.mixin.neoforge;
+package com.remurinthereal.obsidian.core.mixin.neoforge.client;
 
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;

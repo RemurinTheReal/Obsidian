@@ -4,10 +4,10 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
-    "BrandingControlMixin",
-    "MinecraftMixin"
+    "client.MinecraftMixin"
   ],
   "mixins": [
+    "BrandingControlMixin"
   ],
   "injectors": {
     "defaultRequire": 1

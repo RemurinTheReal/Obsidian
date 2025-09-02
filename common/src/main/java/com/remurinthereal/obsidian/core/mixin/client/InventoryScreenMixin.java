@@ -1,4 +1,4 @@
-package com.remurinthereal.obsidian.core.mixin;
+package com.remurinthereal.obsidian.core.mixin.client;
 
 import com.remurinthereal.obsidian.api.platform.PlatformHelper;
 import net.minecraft.client.OptionInstance;

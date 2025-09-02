@@ -7,7 +7,7 @@
 
   ],
   "mixins": [
-    "InventoryScreenMixin"
+    "client.InventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
