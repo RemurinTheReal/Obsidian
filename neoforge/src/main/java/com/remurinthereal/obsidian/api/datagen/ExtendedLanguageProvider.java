@@ -10,7 +10,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.biome.Biome;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
@@ -69,6 +68,7 @@ public abstract class ExtendedLanguageProvider extends LanguageProvider {
             }
 
             add(resolvedKey, path[i]);
+            ADDED_CONFIG_PATHS.add(resolvedKey);
         }
     }
 }
