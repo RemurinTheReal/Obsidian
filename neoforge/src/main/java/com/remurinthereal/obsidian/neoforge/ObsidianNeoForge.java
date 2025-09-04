@@ -1,7 +1,10 @@
 package com.remurinthereal.obsidian.neoforge;
 
+import com.remurinthereal.obsidian.api.platform.RegistrationHelper;
 import com.remurinthereal.obsidian.api.platform.neoforge.CreativeModeTabHelperImpl;
 import com.remurinthereal.obsidian.api.platform.neoforge.RegistrationHelperImpl;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -18,6 +21,7 @@ public final class ObsidianNeoForge {
     public ObsidianNeoForge(ModContainer modContainer, IEventBus eventBus) {
         eventBus.register(CreativeModeTabHelperImpl.class);
         eventBus.register(RegistrationHelperImpl.class);
+
         Obsidian.init();
 
         modContainer.registerConfig(ModConfig.Type.CLIENT, ObsidianConfig.CLIENT_CONFIG);

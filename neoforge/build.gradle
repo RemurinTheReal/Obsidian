@@ -9,6 +9,15 @@ architectury {
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    runs {
+        data {
+            data()
+            programArgs "--all", "--mod", "obsidian"
+            programArgs "--output", project(':common').file('src/generated/resources').getAbsolutePath()
+            programArgs "--existing", project(':common').file('src/main/resources').getAbsolutePath()
+        }
+    }
 }
 
 configurations {
