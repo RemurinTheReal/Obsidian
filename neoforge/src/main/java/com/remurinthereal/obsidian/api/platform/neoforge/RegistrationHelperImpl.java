@@ -20,7 +20,7 @@ import java.util.function.Supplier;
  *
  * @author Remurin
  */
-final class RegistrationHelperImpl {
+public final class RegistrationHelperImpl {
     private static final HashMap<String, HashMap<Registry<?>, DeferredRegister<?>>> DEFERRED_REGISTERS = new HashMap<>();
 
     @SuppressWarnings("unchecked")
