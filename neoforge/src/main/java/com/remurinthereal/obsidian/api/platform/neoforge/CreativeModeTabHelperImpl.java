@@ -1,88 +1,171 @@
 package com.remurinthereal.obsidian.api.platform.neoforge;
 
-import com.remurinthereal.obsidian.api.CreativeModeTabEvent;
-import com.remurinthereal.obsidian.api.RegistrationSupplier;
+import com.remurinthereal.obsidian.api.CreativeModeTabModifier;
+import com.remurinthereal.obsidian.api.platform.CreativeModeTabHelper;
+import com.remurinthereal.obsidian.api.platform.RegistrationHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+/**
+ * {@link CreativeModeTabHelper}
+ *
+ * @author Remurin
+ */
 public final class CreativeModeTabHelperImpl {
-    private static final HashMap<CreativeModeTab, List<Consumer<CreativeModeTabEvent>>> EVENTS = new HashMap<>();
+    private static final HashMap<ResourceKey<CreativeModeTab>, List<Consumer<CreativeModeTabModifier>>> EVENTS = new HashMap<>();
+    private static final List<Consumer<CreativeModeTabModifier>> ALL_EVENTS = new ArrayList<>();
 
-    private static final HashMap<RegistrationSupplier<CreativeModeTab>, List<Consumer<CreativeModeTabEvent>>> REGISTRATION_SUPPLIERS = new HashMap<>();
-    private static final HashMap<ResourceKey<CreativeModeTab>, List<Consumer<CreativeModeTabEvent>>> RESOURCE_KEYS = new HashMap<>();
-
-    public static void modify(CreativeModeTab creativeModeTab, Consumer<CreativeModeTabEvent> consumer) {
+    public static void modify(ResourceKey<CreativeModeTab> creativeModeTab, Consumer<CreativeModeTabModifier> consumer) {
         EVENTS.computeIfAbsent(creativeModeTab, key -> new ArrayList<>()).add(consumer);
     }
 
-    public static void modify(ResourceKey<CreativeModeTab> creativeModeTab, Consumer<CreativeModeTabEvent> consumer) {
-        RESOURCE_KEYS.computeIfAbsent(creativeModeTab, key -> new ArrayList<>()).add(consumer);
+    public static void modifyAll(Consumer<CreativeModeTabModifier> consumer) {
+        ALL_EVENTS.add(consumer);
     }
 
-    public static void modify(RegistrationSupplier<CreativeModeTab> creativeModeTab, Consumer<CreativeModeTabEvent> consumer) {
-        REGISTRATION_SUPPLIERS.computeIfAbsent(creativeModeTab, key -> new ArrayList<>()).add(consumer);
-    }
+    @SuppressWarnings("unchecked")
+    public static ResourceKey<CreativeModeTab> register(ResourceLocation resourceLocation, Consumer<CreativeModeTab.Builder> consumer) {
+        return (ResourceKey<CreativeModeTab>) RegistrationHelper.register(BuiltInRegistries.CREATIVE_MODE_TAB, resourceLocation, () -> {
+            CreativeModeTab.Builder builder = CreativeModeTab.builder();
+            consumer.accept(builder);
 
-    @SubscribeEvent
-    public static void onCommonSetup(FMLCommonSetupEvent event) {
-        REGISTRATION_SUPPLIERS.forEach((key, value) -> {
-            EVENTS.computeIfAbsent(key.get(), innerKey -> new ArrayList<>()).addAll(value);
-        });
-        RESOURCE_KEYS.forEach((key, value) -> {
-            EVENTS.computeIfAbsent(BuiltInRegistries.CREATIVE_MODE_TAB.get(key), innerKey -> {
-                return new ArrayList<>();
-            }).addAll(value);
-        });
-
-        REGISTRATION_SUPPLIERS.clear();
-        RESOURCE_KEYS.clear();
+            return builder.build();
+        }).getKey();
     }
 
     @SubscribeEvent
     public static void buildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
-        if (EVENTS.containsKey(event.getTab())) {
-            EVENTS.get(event.getTab()).forEach(x -> x.accept(new NeoForgeCreativeModeTabEvent(event)));
+        ALL_EVENTS.forEach(x -> x.accept(new CreativeModeTabModifierImpl(event, event.getTab(), event.getTabKey())));
+        if (EVENTS.containsKey(event.getTabKey())) {
+            EVENTS.get(event.getTabKey()).forEach(x -> x.accept(new CreativeModeTabModifierImpl(event, event.getTab(), event.getTabKey())));
         }
     }
 
-    public record NeoForgeCreativeModeTabEvent(BuildCreativeModeTabContentsEvent event) implements CreativeModeTabEvent {
+    private record CreativeModeTabModifierImpl(BuildCreativeModeTabContentsEvent buildCreativeModeTabContentsEvent, CreativeModeTab creativeModeTab, ResourceKey<CreativeModeTab> resourceKey) implements CreativeModeTabModifier {
         @Override
-        public void add(ItemStack... entries) {
-            for (ItemStack entry : entries) {
-                event.accept(entry);
+            public CreativeModeTab.ItemDisplayParameters getDisplayParameters() {
+                return buildCreativeModeTabContentsEvent.getParameters();
+            }
+
+            public CreativeModeTab getTab() {
+                return creativeModeTab;
+            }
+
+            public ResourceKey<CreativeModeTab> getTabKey() {
+                return resourceKey;
+            }
+
+            @Override
+            public void append(Object... entries) {
+                for (Object entry : entries) {
+                    switch (entry instanceof Supplier<?> supplier ? supplier.get() : entry) {
+                        case ItemStack itemStack -> buildCreativeModeTabContentsEvent.accept(itemStack);
+                        case ItemLike itemLike -> buildCreativeModeTabContentsEvent.accept(itemLike);
+                        default -> {
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void prepend(Object... entries) {
+                for (Object entry : entries) {
+                    switch (entry instanceof Supplier<?> supplier ? supplier.get() : entry) {
+                        case ItemStack itemStack ->
+                                buildCreativeModeTabContentsEvent.insertFirst(itemStack, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                        case ItemLike itemLike ->
+                                buildCreativeModeTabContentsEvent.insertFirst(itemLike.asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                        default -> {
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void insert(Object targetEntry, InsertType insertType, Object... entries) {
+                if (insertType == InsertType.AFTER) {
+                    insertAfter(targetEntry, entries);
+                    return;
+                }
+
+                insertBefore(targetEntry, entries);
+            }
+
+            @Override
+            @SuppressWarnings("SuspiciousMethodCalls")
+            public void remove(Object... targetEntries) {
+                for (Object entry : targetEntries) {
+                    buildCreativeModeTabContentsEvent.getParentEntries().remove(entry);
+                    buildCreativeModeTabContentsEvent.getSearchEntries().remove(entry);
+                }
+            }
+
+            private void insertAfter(Object targetEntry, Object... entries) {
+                var obj = targetEntry instanceof Supplier<?> supplier ? supplier.get() : targetEntry;
+                if (obj instanceof ItemLike target) {
+                    var resolvedTarget = target.asItem().getDefaultInstance();
+                    for (Object entry : entries) {
+                        switch (entry instanceof Supplier<?> supplier ? supplier.get() : entry) {
+                            case ItemStack itemStack ->
+                                    buildCreativeModeTabContentsEvent.insertAfter(resolvedTarget, itemStack, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            case ItemLike itemLike ->
+                                    buildCreativeModeTabContentsEvent.insertAfter(resolvedTarget, itemLike.asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            default -> {
+                            }
+                        }
+                    }
+                } else if (obj instanceof ItemStack target) {
+                    for (Object entry : entries) {
+                        switch (entry instanceof Supplier<?> supplier ? supplier.get() : entry) {
+                            case ItemStack itemStack ->
+                                    buildCreativeModeTabContentsEvent.insertAfter(target, itemStack, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            case ItemLike itemLike ->
+                                    buildCreativeModeTabContentsEvent.insertAfter(target, itemLike.asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            default -> {
+                            }
+                        }
+                    }
+                }
+            }
+
+            private void insertBefore(Object targetEntry, Object... entries) {
+                var obj = targetEntry instanceof Supplier<?> supplier ? supplier.get() : targetEntry;
+                if (obj instanceof ItemLike target) {
+                    var resolvedTarget = target.asItem().getDefaultInstance();
+                    for (Object entry : entries) {
+                        switch (entry instanceof Supplier<?> supplier ? supplier.get() : entry) {
+                            case ItemStack itemStack ->
+                                    buildCreativeModeTabContentsEvent.insertBefore(resolvedTarget, itemStack, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            case ItemLike itemLike ->
+                                    buildCreativeModeTabContentsEvent.insertBefore(resolvedTarget, itemLike.asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            default -> {
+                            }
+                        }
+                    }
+                } else if (obj instanceof ItemStack target) {
+                    for (Object entry : entries) {
+                        switch (entry instanceof Supplier<?> supplier ? supplier.get() : entry) {
+                            case ItemStack itemStack ->
+                                    buildCreativeModeTabContentsEvent.insertBefore(target, itemStack, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            case ItemLike itemLike ->
+                                    buildCreativeModeTabContentsEvent.insertBefore(target, itemLike.asItem().getDefaultInstance(), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
+                            default -> {
+                            }
+                        }
+                    }
+                }
             }
         }
-
-        @Override
-        public void addAfter(ItemStack targetEntry, ItemStack... entries) {
-            for (ItemStack entry : entries) {
-                event.insertAfter(targetEntry, entry, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            }
-        }
-
-        @Override
-        public void addBefore(ItemStack targetEntry, ItemStack... entries) {
-            for (ItemStack entry : entries) {
-                event.insertBefore(targetEntry, entry, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS);
-            }
-        }
-
-        @Override
-        public void remove(ItemStack... entries) {
-            List<ItemStack> list = List.of(entries);
-
-            event.getParentEntries().removeIf(list::contains);
-            event.getSearchEntries().removeIf(list::contains);
-        }
-    }
 }

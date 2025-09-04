@@ -12,6 +12,10 @@ import net.neoforged.neoforge.internal.BrandingControl;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+/**
+ * Optionally merges the NeoForge version branding with that of Minecraft. Similar to Fabric.
+ * @author Remurin
+ */
 @SuppressWarnings("UnstableApiUsage")
 @Mixin(value = BrandingControl.class, priority = Integer.MAX_VALUE)
 public final class BrandingControlMixin {
