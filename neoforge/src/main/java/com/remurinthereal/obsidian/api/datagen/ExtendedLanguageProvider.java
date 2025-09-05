@@ -2,6 +2,7 @@ package com.remurinthereal.obsidian.api.datagen;
 
 import com.remurinthereal.obsidian.api.RegistrationSupplier;
 import net.minecraft.core.Holder;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -14,6 +15,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.HashSet;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public abstract class ExtendedLanguageProvider extends LanguageProvider {
@@ -21,6 +23,14 @@ public abstract class ExtendedLanguageProvider extends LanguageProvider {
 
     public ExtendedLanguageProvider(PackOutput output, String modID, String locale) {
         super(output, modID, locale);
+    }
+
+    @Override
+    public CompletableFuture<?> run(CachedOutput cache) {
+        var result = super.run(cache);;
+        ADDED_CONFIG_PATHS.clear();
+
+        return result;
     }
 
     public void addItem(Supplier<? extends Item> key, String name, String description) {
