@@ -13,6 +13,7 @@ public class ObsidianEnglishLanguageProvider extends ExtendedLanguageProvider {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void addTranslations() {
         add(ObsidianConfig.BRANDING_COMPACT_VERSION, "Compact Branding", "NeoForge Branding");
     }

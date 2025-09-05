@@ -60,6 +60,8 @@ public abstract class ExtendedLanguageProvider extends LanguageProvider {
         add(key.location().toLanguageKey("jukebox_song"), name);
     }
 
+    @Deprecated
+    @SuppressWarnings("DeprecatedIsStillUsed")
     public void add(ModConfigSpec.ConfigValue<?> key, String... path) {
         for(int i = 0; i < path.length && i < key.getPath().size(); i++) {
             String resolvedKey = "configuration." + getName().substring(getName().lastIndexOf(": ") + 2) + "." + key.getPath().reversed().get(i);
