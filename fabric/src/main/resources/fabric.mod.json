@@ -14,8 +14,12 @@
   "icon": "assets/${mod_id}/icon.png",
   "environment": "client",
   "entrypoints": {
-    "main": ["com.remurinthereal.obsidian.fabric.ObsidianFabric"],
-    "client": ["com.remurinthereal.obsidian.fabric.client.ObsidianFabricClient"]
+    "main": [
+      "com.remurinthereal.obsidian.core.fabric.ObsidianFabric"
+    ],
+    "client": [
+      "com.remurinthereal.obsidian.core.fabric.client.ObsidianFabricClient"
+    ]
   },
   "mixins": ["${mod_id}.mixins.json", "${mod_id}-fabric.mixins.json"],
   "depends": {

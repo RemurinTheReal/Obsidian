@@ -1,13 +1,13 @@
 {
   "required": true,
-  "package": "com.remurinthereal.obsidian.core.mixin.neoforge",
+  "package": "com.remurinthereal.obsidian.mixin.neoforge",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
-    "client.MinecraftMixin"
+    "core.client.MinecraftMixin"
   ],
   "mixins": [
-    "BrandingControlMixin"
+    "core.BrandingControlMixin"
   ],
   "injectors": {
     "defaultRequire": 1

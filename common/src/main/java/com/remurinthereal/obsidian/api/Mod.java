@@ -8,12 +8,13 @@ import java.util.List;
  *
  * @author Remurin
  */
+
 public interface Mod {
 
     /**
      * @return the id for this mod
      */
-    String getID();
+    String getId();
 
     /**
      * @return the mod's version as a {@link String}
